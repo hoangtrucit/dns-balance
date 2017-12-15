@@ -281,6 +281,7 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 	m := new(dns.Msg)
 	m.SetEdns0(4096, true)
 	m.SetReply(r)
+	m.Authoritative = true
 	m.Compress = *compress
 	if ip, ok := w.RemoteAddr().(*net.UDPAddr); ok {
 		//str = "Port: " + strconv.Itoa(ip.Port) + " (udp)"
