@@ -79,7 +79,10 @@ func QueryRecordA(domain string,alias string) (TypeRecordA , error){
 	aliasM := ""
 	if alias == "" {
 		aliasM = "www"
+	}else{
+		aliasM = alias
 	}
+	fmt.Println("records.A." + aliasM)
 	result := gjson.Get(ConfigDomain[domain],"records.A." + aliasM )
 
 	if result.Exists(){
