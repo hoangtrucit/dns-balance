@@ -1,0 +1,86 @@
+{
+  "records" :{
+    "A" : {
+      "api" : {
+        "ttl" : 1,
+        "ips" : [
+          {
+            "ip" : "10.0.1.110",
+            "weight" : 1
+          },
+          {
+            "ip" : "10.0.1.111",
+            "weight" : 2
+          },
+          {
+            "ip" : "10.0.1.112",
+            "weight" : 3
+          },
+          {
+            "ip" : "10.0.1.113",
+            "weight" : 4
+          }
+        ],
+        "total" : 10
+      },
+      "admin": {
+        "ttl" : 1,
+        "ip" : "10.0.1.110"
+      },
+      "www":{
+        "ttl" : 1,
+        "ips" : [
+          {
+            "ip" : "10.0.1.10",
+            "weight" : 1
+          },
+          {
+            "ip" : "10.0.1.11",
+            "weight" : 2
+          },
+          {
+            "ip" : "10.0.1.12",
+            "weight" : 3
+          },
+          {
+            "ip" : "10.0.1.13",
+            "weight" : 4
+          }
+        ],
+        "total" : 10
+      }
+    },
+    "MX": [
+      {
+        "server" : "mx.zoho.com",
+        "priority" : 20
+      },
+      {
+        "server" : "mx2.zoho.com",
+        "priority" : 10
+      }
+    ],
+    "CNAME": {
+      "zb15010089" : "zmverify.zoho.com",
+      "y3didgvfpqqvwqhktfilqemcqpc65yl2": {
+        "_domainkey" : "y3didgvfpqqvwqhktfilqemcqpc65yl2.dkim.amazonses.com"
+      }
+    },
+    "TXT":{
+      "tructh": {
+        "dev" : [
+          "google-site-verification=Eg0wlsMRwPvyLHhPjzJwfmd90fwegYrbud1xq7fPllY",
+          "v=spf1 include:zoho.com ~all"
+        ]
+      },
+      "_amazonses":[
+        "Ncwk2fjmLnw4beMfdcfm81ILaM4EKhZBU2HiKm3R/60="
+      ],
+      "zoho":{
+        "_domainkey":[
+          "v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCZt7oJDnRI/5SdPGnhI+YczFWlXOzxB838jIesup5hmCENd2x52pymvj11GwIeyhgY5S1rEoQqL5JcAZpAPaJ2xCdI4OVSo86bvHkt8xSWZoVuIEACYLK+sLOg0CmZ09GSmNtFvnxKnxJQpKTkqyhCGiD/FQML0pQqRXBsa80X3QIDAQAB"
+        ]
+      }
+    }
+  }
+}
