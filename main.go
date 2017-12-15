@@ -237,6 +237,19 @@ func GetDNSDS(m *dns.Msg){
 	m.Answer = append(m.Answer,ds2)
 }
 
+func GetDNSSOA(m *dns.Msg){
+	soa := new(dns.SOA)
+	soa.Hdr = dns.RR_Header{"tructh.xyz.", dns.TypeSOA, dns.ClassINET, 14400, 0}
+	soa.Ns = "ns1.tructh.xyz."
+	soa.Mbox = "ns2.tructh.xyz."
+	soa.Serial = 1513346597
+	soa.Refresh = 7200
+	soa.Retry = 1800
+	soa.Expire = 604800
+	soa.Minttl = 120
+	m.Answer = append(m.Answer,soa)
+}
+
 func SaveLog(msg *dns.Msg){
 	start := time.Now()
 	str := `
@@ -308,13 +321,24 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 	case dns.TypeCNAME:
 		resultRecordCNAME, errMain := QueryRecordCNAME(domainName, suffixDomain)
 		if errMain != nil {
-			return
+			soa := new(dns.SOA)
+			soa.Hdr = dns.RR_Header{"tructh.xyz.", dns.TypeSOA, dns.ClassINET, 14400, 0}
+			soa.Ns = "ns1.tructh.xyz."
+			soa.Mbox = "ns2.tructh.xyz."
+			soa.Serial = 1513346597
+			soa.Refresh = 7200
+			soa.Retry = 1800
+			soa.Expire = 604800
+			soa.Minttl = 120
+			m.Ns = append(m.Ns,soa)
+		}else{
+
+			xCNAME := &dns.CNAME{
+				Hdr:    dns.RR_Header{Name: r.Question[0].Name, Rrtype: dns.TypeCNAME, Class: dns.ClassINET, Ttl: 0},
+				Target: resultRecordCNAME.Str + ".",
+			}
+			m.Answer = append(m.Answer, xCNAME)
 		}
-		xCNAME := &dns.CNAME{
-			Hdr:    dns.RR_Header{Name: r.Question[0].Name, Rrtype: dns.TypeCNAME, Class: dns.ClassINET, Ttl: 0},
-			Target: resultRecordCNAME.Str + ".",
-		}
-		m.Answer = append(m.Answer, xCNAME)
 	case dns.TypeAAAA, dns.TypeA:
 		resultRecordA, errMain := QueryRecordA(domainName, suffixDomain)
 		if errMain != nil {
@@ -477,7 +501,6 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 		//m.Extra = append(m.Extra, t)
 	case dns.TypeMX:
 		resultRecordMX, errMain := QueryRecordCMX(domainName, suffixDomain)
-		fmt.Println(resultRecordMX)
 		if errMain != nil {
 			return
 		}
@@ -505,20 +528,12 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 		m.Answer = append(m.Answer,ns1)
 		m.Answer = append(m.Answer,ns2)
 	case dns.TypeSOA:
-		soa := new(dns.SOA)
-		soa.Hdr = dns.RR_Header{"tructh.xyz.", dns.TypeSOA, dns.ClassINET, 14400, 0}
-		soa.Ns = "ns1.tructh.xyz."
-		soa.Mbox = "ns2.tructh.xyz."
-		soa.Serial = 1513346597
-		soa.Refresh = 7200
-		soa.Retry = 1800
-		soa.Expire = 604800
-		soa.Minttl = 120
-		m.Answer = append(m.Answer,soa)
+		GetDNSSOA(m)
 	case dns.TypeDNSKEY:
 		GetDNSKEY(m)
 	case dns.TypeDS:
 		GetDNSDS(m)
+
 	//case dns.TypeAXFR, dns.TypeIXFR:
 	//	c := make(chan *dns.Envelope)
 	//	tr := new(dns.Transfer)
@@ -532,6 +547,8 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 	//	// w.Close() // Client closes connection
 	//	return
 	}
+
+
 
 	if r.IsTsig() != nil {
 		if w.TsigStatus() == nil {
