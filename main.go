@@ -568,6 +568,7 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 	//	w.Write(buf[:len(buf)/2])
 	//	return
 	//}
+	fmt.Println(m)
 	w.WriteMsg(m)
 }
 
