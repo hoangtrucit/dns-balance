@@ -68,7 +68,7 @@
     },
     "TXT":{
       "tructh": {
-        "dev" : [
+        "xyz" : [
           "google-site-verification=Eg0wlsMRwPvyLHhPjzJwfmd90fwegYrbud1xq7fPllY",
           "v=spf1 include:zoho.com ~all"
         ]

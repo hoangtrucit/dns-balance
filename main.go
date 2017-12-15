@@ -509,11 +509,11 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 		soa.Hdr = dns.RR_Header{"tructh.xyz.", dns.TypeSOA, dns.ClassINET, 14400, 0}
 		soa.Ns = "ns1.tructh.xyz."
 		soa.Mbox = "ns2.tructh.xyz."
-		soa.Serial = 1293945905
-		soa.Refresh = 14400
-		soa.Retry = 3600
+		soa.Serial = 1513346597
+		soa.Refresh = 7200
+		soa.Retry = 1800
 		soa.Expire = 604800
-		soa.Minttl = 86400
+		soa.Minttl = 120
 		m.Answer = append(m.Answer,soa)
 	case dns.TypeDNSKEY:
 		GetDNSKEY(m)
