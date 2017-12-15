@@ -44,7 +44,7 @@ import (
 	"syscall"
 	"time"
 	"github.com/miekg/dns"
-	"replydns/dnsquery"
+	"dns-balance/dnsquery"
 	"crypto/rsa"
 	"io/ioutil"
 )
