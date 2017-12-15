@@ -494,6 +494,16 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 		//		fmt.Println(pubkey.(*dns.DNSKEY).ToDS(dns.SHA1))
 		//		getKeySign()
 		m.Answer = append(m.Answer, rrRecordA)
+		soa := new(dns.SOA)
+		soa.Hdr = dns.RR_Header{"tructh.xyz.", dns.TypeSOA, dns.ClassINET, 14400, 0}
+		soa.Ns = "ns1.tructh.xyz."
+		soa.Mbox = "ns2.tructh.xyz."
+		soa.Serial = 1513346597
+		soa.Refresh = 7200
+		soa.Retry = 1800
+		soa.Expire = 604800
+		soa.Minttl = 120
+		m.Ns = append(m.Ns,soa)
 		//		m.Answer = append(m.Answer, pubkey)
 		//nn := []byte(m.String())
 
