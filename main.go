@@ -216,6 +216,26 @@ Activate: 20171212170749
 	m.Answer = append(m.Answer,sig)
 }
 
+func GetDNSKEY(m *dns.Msg){
+	pubkey1, _ := dns.ReadRR(strings.NewReader(`tructh.xyz. IN DNSKEY 256 3 8 AwEAAc/Bso4hkm58/KH1m66l5AkDyalWLvLOMq0cPxB7oGfoPz/nIzFe JbdGX7jEJhSdq1Xmjts2Tkl1F79Hw3foWW8XX7IW/5JsGasdAtltWz6S 9YpfuFEBRA8nDwblkD3tlHYiqAjfujMeBaWmR8Q0G3NF69xy6HAnvVxM mmMlYjL1`), "./keys/Ktructh.xyz.+008+20826.key")
+	pubkey2, _ := dns.ReadRR(strings.NewReader(`tructh.xyz. IN DNSKEY 257 3 8 AwEAAb9WNQqyj6CSQJ7rppXHB2wwvtnmtdhWOw7qi8MOLvwZkpO0cihl D9ZcG3MurIxrSxa02A8T4r7ZT9Pzf8GTNQml/gAA8Ep3gHtC3InBzSzG REVJ0JM0DOggnAyqrSD294KlrB3HNNcPvdg4T0wesooLTmuTatzbdeXK 2uXdQM3F`), "./keys/Ktructh.xyz.+008+29704.key")
+	pubkey1 = pubkey1.(*dns.DNSKEY)
+	pubkey2 = pubkey2.(*dns.DNSKEY)
+	m.Answer = append(m.Answer,pubkey1)
+	m.Answer = append(m.Answer,pubkey2)
+}
+
+func GetDNSDS(m *dns.Msg){
+	pubkey1, _ := dns.ReadRR(strings.NewReader(`tructh.xyz. IN DNSKEY 256 3 8 AwEAAc/Bso4hkm58/KH1m66l5AkDyalWLvLOMq0cPxB7oGfoPz/nIzFe JbdGX7jEJhSdq1Xmjts2Tkl1F79Hw3foWW8XX7IW/5JsGasdAtltWz6S 9YpfuFEBRA8nDwblkD3tlHYiqAjfujMeBaWmR8Q0G3NF69xy6HAnvVxM mmMlYjL1`), "./keys/Ktructh.xyz.+008+20826.key")
+	pubkey2, _ := dns.ReadRR(strings.NewReader(`tructh.xyz. IN DNSKEY 257 3 8 AwEAAb9WNQqyj6CSQJ7rppXHB2wwvtnmtdhWOw7qi8MOLvwZkpO0cihl D9ZcG3MurIxrSxa02A8T4r7ZT9Pzf8GTNQml/gAA8Ep3gHtC3InBzSzG REVJ0JM0DOggnAyqrSD294KlrB3HNNcPvdg4T0wesooLTmuTatzbdeXK 2uXdQM3F`), "./keys/Ktructh.xyz.+008+29704.key")
+
+	ds1 := pubkey1.(*dns.DNSKEY).ToDS(dns.SHA256)
+	ds2 := pubkey2.(*dns.DNSKEY).ToDS(dns.SHA256)
+
+	m.Answer = append(m.Answer,ds1)
+	m.Answer = append(m.Answer,ds2)
+}
+
 func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 	start := time.Now()
 	ioutil.WriteFile("./logs/log_"+start.String(), []byte(r.String()), 0644)
@@ -485,6 +505,10 @@ func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
 		soa.Expire = 604800
 		soa.Minttl = 86400
 		m.Answer = append(m.Answer,soa)
+	case dns.TypeDNSKEY:
+		GetDNSKEY(m)
+	case dns.TypeDS:
+		GetDNSDS(m)
 	//case dns.TypeAXFR, dns.TypeIXFR:
 	//	c := make(chan *dns.Envelope)
 	//	tr := new(dns.Transfer)
