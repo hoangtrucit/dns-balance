@@ -241,10 +241,10 @@ func SaveLog(msg *dns.Msg){
 	start := time.Now()
 	str := `
 		NAME: `+msg.Question[0].Name+`
-		NAME: `+string(msg.Question[0].Qclass)+`
-		NAME: `+string(msg.Question[0].Qtype)+`
+		NAME: `+strconv.Itoa(int(msg.Question[0].Qclass))+`
+		NAME: `+strconv.Itoa(int(msg.Question[0].Qtype))+`
 	`
-	ioutil.WriteFile("./logs/log_"+string(strconv.FormatInt(start.Unix(), 10)), []byte(str), 0644)
+	ioutil.WriteFile("./logs/log_"+string(strconv.FormatInt(start.Unix(), 10)) + ".log", []byte(str), 0644)
 }
 
 func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
