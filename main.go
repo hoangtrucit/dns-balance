@@ -49,6 +49,7 @@ import (
 	"errors"
 	"math/rand"
 	"github.com/weppos/publicsuffix-go/publicsuffix"
+	"strconv"
 )
 
 type TypeRecordA struct{
@@ -236,9 +237,18 @@ func GetDNSDS(m *dns.Msg){
 	m.Answer = append(m.Answer,ds2)
 }
 
-func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
+func SaveLog(msg *dns.Msg){
 	start := time.Now()
-	ioutil.WriteFile("./logs/log_"+start.String(), []byte(r.String()), 0644)
+	str := `
+		NAME: `+msg.Question[0].Name+`
+		NAME: `+string(msg.Question[0].Qclass)+`
+		NAME: `+string(msg.Question[0].Qtype)+`
+	`
+	ioutil.WriteFile("./logs/log_"+string(strconv.FormatInt(start.Unix(), 10)), []byte(str), 0644)
+}
+
+func handleReflect(w dns.ResponseWriter, r *dns.Msg) {
+	SaveLog(r)
 	domainName, suffixDomain, errorDomain := ValidDomain(r.Question[0].Name)
 	if errorDomain != nil {
 		return
